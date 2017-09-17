@@ -1,0 +1,142 @@
+page-home {
+
+	.scroll-content {
+        height: 100%
+      }
+
+    	#map 
+      	{
+        	width: 100%;
+        	height: 100%;
+      	}
+
+.map-icon-label .map-icon {
+	font-size: 24px;
+	color: #FFFFFF;
+	line-height: 20px;
+	text-align: center;
+	white-space: nowrap;
+}
+
+// .rightMenue
+// {
+// background-color: whitesmoke;
+// box-shadow: 8px 3px 10px gray;
+// height: 61px;
+// padding-left: 5px;
+// padding-right: 5px;
+// padding-top: 5px;
+// position: absolute;
+// right: 15px;
+// top: 12px;
+// width: 88%;
+// background: #f8f8f8 none repeat scroll 0 0;
+
+// }
+
+	.rightMenue {
+  background: #f8f8f8 none repeat scroll 0 0;
+  box-shadow: 8px 3px 10px gray;
+  height: 91%;
+  left: 2px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 5px;
+  position: absolute;
+  top: 2px;
+  width: 23%;
+}
+
+.toolbar-md {
+ // min-height: 56px;
+  padding: 4px;
+}
+.alert-message{
+  overflow-y: hidden !important;
+}
+
+.alert-md .alert-wrapper {
+  max-width: 350px;
+  padding: 5px;
+}
+
+ion-label {
+// color:red;
+  font-size: 0.8em;
+
+}
+
+#legend {
+        font-family: Arial, sans-serif;
+        background: #fff;
+        padding: 10px;
+        margin: 10px;
+        //border: 3px solid #000;
+        background: #f8f8f8 none repeat scroll 0 0;
+        box-shadow: 8px 3px 10px gray;
+      }
+      #legend h3 {
+        margin-top: 0;
+      }
+      #legend img {
+        vertical-align: middle;
+      }
+
+      .menu >ion-item {
+        background:#f8f8f8 none repeat scroll 0 0;
+      }
+
+      .searchbar-md .searchbar-search-icon {
+ // left: 255px;
+}
+
+.show-circle{
+  font-size: 1rem;
+  padding-left: 3px;
+  color: blue;
+}
+
+.circle-checkbox{
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+// .circle-slider{
+//     bottom: 80px;
+//    // padding: 10px;
+//     position: absolute;
+//     right: 10px;
+//       background: #f8f8f8 none repeat scroll 0 0;
+//   box-shadow: 8px 3px 10px gray;
+//   width:21%;
+// }
+
+.range.range-has-pin {
+   padding-left: 0;
+    padding-top: 0px;
+}
+.item-md h5,p{
+   font-size: 1.3rem;
+}
+.item-md p {
+   font-size: 1.3rem;
+  
+}
+
+.label-md {
+  margin: 8px 8px 5px 0;
+}
+
+.gm-style-cc>div{
+  bottom: 77px!important;
+  right: 10px!important;
+  background-color: #FFF;
+  font-weight: bolder;    
+  color: darkblue!important;
+  font-size: 14px;
+}
+
+
+ 
+
+}

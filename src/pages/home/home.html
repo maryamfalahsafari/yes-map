@@ -1,0 +1,131 @@
+<ion-header>
+  <ion-navbar>
+    <ion-grid >
+      <ion-row>
+        <ion-col col-1>
+            <button ion-button color="light" (click)="toggleWidget()">
+            <ion-icon name="menu"></ion-icon>
+      </button>
+        </ion-col>
+        <ion-col col-2>
+           <select name="drpState" [(ngModel)]="filter.state" required style="width:90%;margin-top:6px;" (change)="getDataBasedOnStateId(filter.state)">
+                  <option value="">SELECT STATE</option>
+                  <option *ngFor='let state of stateList' [ngValue]="state">{{state.Name}}</option>
+            </select>
+        </ion-col>
+         <ion-col col-2>
+            <select name="drpPPD" [(ngModel)]="filter.ppd" required style="width:90%;margin-top:6px;" (change)="getDataBasedOnPPD(filter.ppd)">
+                  <option value="">SELECT PPD</option>
+                  <option *ngFor='let ppd of ppdList' [ngValue]="ppd">{{ppd.PPDName}}</option>
+            </select>
+         </ion-col>
+          <ion-col col-2>
+             <select name="drpCity" [(ngModel)]="filter.city" style="width:90%;margin-top:6px;" (change)="getDataBasedOnCityId(filter.city)">
+                  <option value="">SELECT CITY</option>
+                  <option *ngFor='let city of cityList' [value]="city.Id">{{city.Name}}</option>
+              </select>
+         </ion-col>
+          <ion-col col-2>
+            <select name="drpSchool" [(ngModel)]="filter.school" style="width:90%;margin-top:6px;" (change)="ZoomToSchoole(filter.school,filter.school.Latitude,filter.school.Longitude)">
+                  <option value="">SELECT SCHOOL</option>
+                  <option *ngFor='let school of schoolList' [ngValue]="school">{{school.SchoolCode}}</option>
+            </select>
+         </ion-col>
+         <ion-col col-3>
+             <button ion-button color="primary" (click)="showFilterDialog()" small [disabled]="!this.filter.ppd">Apply Filter</button>
+         </ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </ion-navbar>
+</ion-header>
+
+<ion-content style="position: relative;">
+   <div #map id="map" style="color: dodgerblue"></div>
+   <div #legend id="legend"></div>
+  <div class="rightMenue" *ngIf="!firstLoad" [ngClass]="menuClass">
+  
+  <ion-list class="menu" >
+      <div style="text-align: right;">
+        <ion-searchbar (keyup.enter)="someFunction($event)" placeholder="Search(Lat,Long)"></ion-searchbar>
+       
+      </div>
+      <ion-item>
+        <ion-label> BASE STATION <span *ngIf="baseStationGeoList">({{baseStationGeoList.length}})</span></ion-label>
+        <span  item-right>
+          <input [disabled]="!filter.state" type="checkbox" [(ngModel)]="mapFilter.baseStationCircle" (change)="changeShowBaseStationCircle()"  class="circle-checkbox"/>
+          <span class="show-circle">Show Cricle</span>
+        </span>
+        <img src="../assets/icon/ico_base_station.svg" item-left/>
+        <ion-toggle [disabled]="!filter.state" [(ngModel)]="mapFilter.baseStation" (ionChange)="changeShowBaseStation()" color="primary"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-label> YES STORE <span *ngIf="yesGeoList">({{yesGeoList.length}})</span></ion-label>
+        <span  item-right>
+          <input [disabled]="!filter.ppd" type="checkbox" [(ngModel)]="mapFilter.yesCircle" (change)="changeShowYesCircle()" class="circle-checkbox"/>
+          <span class="show-circle">Show Cricle</span>
+        </span>
+        <img src="../assets/icon/ico_yes_store.svg" item-left/>
+        <ion-toggle [disabled]="!filter.ppd" [(ngModel)]="mapFilter.yes" (ionChange)="changeShowYesStore()" color="primary"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-label> SCHOOL  <span *ngIf="selectedSchoole.NoOfSchools">({{selectedSchoole.NoOfSchools}})</span></ion-label>
+        <!--<ion-label> SCHOOL  <span *ngIf="schoolGeoList">({{schoolGeoList.length}})</span></ion-label>-->
+        <span  item-right>
+          <input [disabled]="!filter.ppd" type="checkbox"[(ngModel)]="mapFilter.schoolCircle" (change)="changeShowSchoolCircle()" class="circle-checkbox"/>
+          <span class="show-circle">Show Cricle</span>
+        </span>
+        <img src="../assets/icon/ico_school_01.svg" item-left/>
+        <ion-toggle [disabled]="!filter.ppd" [(ngModel)]="mapFilter.school" (ionChange)="changeShowSchool()" color="primary"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-label> WIMAX</ion-label>
+        <ion-toggle [(ngModel)]="mapFilter.wimax" (ionChange)="changeShowWimax()" color="primary"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-label> LTE</ion-label>
+        <ion-toggle [(ngModel)]="mapFilter.lte" (ionChange)="changeShowLTE()" color="primary"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <h5>No Of Schools</h5>
+        <p>{{selectedSchoole.NoOfSchools}}</p>
+      </ion-item>
+      <ion-item>
+        <h5>No Of Altitude Teachers</h5>
+        <p>{{formatNumber(selectedSchoole.NoOfAltitudeTeachers)}}</p>
+      </ion-item>
+      <ion-item>
+        <h5> No Of Plan Upgrade</h5>
+        <p>{{formatNumber(selectedSchoole.NoOfPlanUpgrade)}}</p>
+      </ion-item>
+      <ion-item>
+        <h5> Total AddOn Purchase</h5>
+        <p>{{formatNumber(selectedSchoole.TotalAddOnPurchase)}}</p>
+      </ion-item>
+      <ion-item>
+        <h5> No of YESApp Download</h5>
+        <p>{{formatNumber(selectedSchoole.NoofYESAppDownload)}}</p>
+      </ion-item>
+    <ion-item style="background-color: transparent;">
+    <ion-label>{{circleRadius}}Km</ion-label>
+       <ion-range pin="true"  min="0" max="20" step="5" snaps="true" color="secondary" [(ngModel)]="circleRadius" 
+        (ionChange)="circleRadiusChange($event)">
+          <ion-icon range-left small name="star"></ion-icon>
+          <ion-icon range-right name="star"></ion-icon>
+          </ion-range>
+    </ion-item>
+</ion-list>
+       
+    </div>
+    <!--<div class="circle-slider">
+      <ion-item style="background-color: transparent;">
+       <ion-range pin="true"  min="0" max="20" step="3" snaps="true" color="secondary" [(ngModel)]="circleRadius" 
+        (ionChange)="circleRadiusChange($event)">
+          <ion-icon range-left small name="star"></ion-icon>
+          <ion-icon range-right name="star"></ion-icon>
+              </ion-range>
+    </ion-item>
+  </div>-->
+</ion-content>
+<!--<img src="../maps/assets/icon/ico_yes_store.svg" item-left/>-->
+
